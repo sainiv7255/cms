@@ -68,23 +68,21 @@ class PagesController extends AppController
             throw new NotFoundException();
         }
     }
-	 public function home() {
-        
+      public function home() {
+		  	
         if ($this->request->is('post')) {
-            //print_r($this->request->data);die();
-            $requestData = $this->request->data;
-            $username = $requestData['username'];
-  
-               $user = $this->Auth->identify($requestData);
+			$data =$this->request->getData();
+			$Pages = $this->Pages->newEntity();
+            $Pages = $this->Pages->patchEntity($Pages,$data );
 
-               //$getdata = TableRegistry::get('user')->find('all')->where(['username' => $requestData['username']])->toArray();
-			 
-       
-            
-                    
-                  }
-                
+            if ($this->Pages->save($Pages)) {
+                $this->Flash->success(__('User has been saved.'));
+                return $this->redirect(['action' => 'index']);
             }
+            $this->Flash->error(__('Unable to add District.'));
+			
+        }
+	   }
 	public function logout() {
         $this->autoRender = false;
 
